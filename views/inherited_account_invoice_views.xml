@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+       <record id="inkassogram_invoice_form_inherited" model="ir.ui.view">
+           <field name="name">inkassogram.invoice.form.inherited</field>
+           <field name="model">account.invoice</field>
+           <field name="inherit_id" ref="account.invoice_form"/>
+           <field name="arch" type="xml">
+               <xpath expr="//form/sheet/group/group/div" position="after">
+                   <field name="inkasso_code" readonly="1"/>
+               </xpath>
+               <field name="comment" position="after">
+                   <field name="xml_data" readonly="1" groups="base.group_no_one"/>
+               </field>
+               <button name="action_invoice_draft" position="after">
+                   <button name="send_to_inkasso" states="open,error" string="SEND TO INKASSO" type="object" groups="account.group_account_invoice" confirm="Are you sure you want to send this invoice to Inkassogram service?"/>
+               </button>
+               <button name="action_invoice_sent" position="after">
+                    <button name="action_invoice_sent" type="object" string="Send by Email" attrs="{'invisible':['|',('sent','=',True), ('state', 'not in', ['error', 'inkasso'])]}" class="oe_highlight" groups="base.group_user"/>
+                    <button name="invoice_print" string="Print" type="object" attrs="{'invisible':['|',('sent','=',True), ('state', 'not in', ['error', 'inkasso'])]}" class="oe_highlight" groups="base.group_user"/>
+                    <button name="action_invoice_sent" type="object" string="Send by Email" attrs="{'invisible':['|',('sent','=',False), ('state', 'not in', ['error', 'inkasso'])]}" groups="base.group_user"/>
+                    <button name="invoice_print" string="Print Invoice" type="object" attrs="{'invisible':['|',('sent','=',False), ('state', 'not in', ['error', 'inkasso'])]}" groups="base.group_user"/>
+                    <button name="%(account.action_account_invoice_payment)d" type="action" states="inkasso" string="Register Payment" groups="account.group_account_invoice" class="oe_highlight"/>
+                   <button name="action_invoice_cancel" type="object" states="inkasso" string="Cancel Invoice" groups="base.group_no_one"/>
+               </button>
+           </field>
+       </record>
+
+    </data>
+</odoo>
